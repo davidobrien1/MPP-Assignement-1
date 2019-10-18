@@ -105,8 +105,11 @@ void orders()
     while ((read = getline(&line, &len, fp)) != -1) { 	// this says keep reading the line until we get to the end
 		char *n = strtok(line, ",");
 		char *b = strtok(NULL, ",");
+		char *s = strtok(NULL, ",");
+		char *q = strtok(NULL, ",");
 		double budget = atof(b); //converts to floating point
-	printf("CUSTOMER NAME: %s\nCUSTOMER BUDGET: %.2f\n", n,budget);
+		int quantity = atoi(q); //converts to an integer
+	printf("CUSTOMER NAME: %s\nCUSTOMER BUDGET: %.2f\nSHOPPING LIST: %s\nQUANTITY: %d\n", n,budget,s,quantity);
 	printf("-------------\n");
     }
 }
