@@ -46,7 +46,7 @@ void printCustomer(struct Customer c) // This prints the customer into
 
 struct Shop createAndStockShop()
 {
-	struct Shop shop = { 200 };
+
     FILE * fp;
     char * line = NULL;
     size_t len = 0;
@@ -55,6 +55,10 @@ struct Shop createAndStockShop()
     fp = fopen("stock.csv", "r"); 	// r is to read the file, w to write
     if (fp == NULL)					// if the file doesnt exist, exit the program (error handling)
         exit(EXIT_FAILURE);
+
+	getline(&line, &len, fp);
+	double cashInShop = atof(line);		// creates the variable cashInShop from the first line in csv file
+	struct Shop shop = { cashInShop };	// declares the initial value of the cashInShop
 
     while ((read = getline(&line, &len, fp)) != -1) { 	// this says keep reading the line until we get to the end
         // printf("Retrieved line of length %zu:\n", read);
@@ -75,6 +79,7 @@ struct Shop createAndStockShop()
 	return shop;
 }
 
+
 void printShop(struct Shop s)
 {
 	printf("Shop has %.2f in cash\n", s.cash);
@@ -84,6 +89,24 @@ void printShop(struct Shop s)
 		printf("The shop has %d of the above\n", s.stock[i].quantity);
 	}
 }
+
+void orders()
+{
+
+    FILE * fp;
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    fp = fopen("orders.csv", "r"); 	// r is to read the file, w to write
+    if (fp == NULL)					// if the file doesnt exist, exit the program (error handling)
+        exit(EXIT_FAILURE);
+
+    while ((read = getline(&line, &len, fp)) != -1) { 	// this says keep reading the line until we get to the end
+	printf("%s IS A LINE", line);
+    }
+}
+
 
 int main(void) 
 {
@@ -103,7 +126,10 @@ int main(void)
 	
 	struct Shop shop = createAndStockShop();
 	printShop(shop);
+
+	orders();
 	
+
 // printf("The shop has %d of the product %s\n", cokeStock.quantity, cokeStock.product.name);
 	
     return 0;
