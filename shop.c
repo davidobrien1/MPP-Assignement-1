@@ -103,7 +103,11 @@ void orders()
         exit(EXIT_FAILURE);
 
     while ((read = getline(&line, &len, fp)) != -1) { 	// this says keep reading the line until we get to the end
-	printf("%s IS A LINE", line);
+		char *n = strtok(line, ",");
+		char *b = strtok(NULL, ",");
+		double budget = atof(b); //converts to floating point
+	printf("CUSTOMER NAME: %s\nCUSTOMER BUDGET: %.2f\n", n,budget);
+	printf("-------------\n");
     }
 }
 
