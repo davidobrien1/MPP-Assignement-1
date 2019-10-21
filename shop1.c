@@ -98,29 +98,26 @@ void orders()
     size_t len = 0;
     ssize_t read;
 
-    fp = fopen("orders.csv", "r"); 	// r is to read the file, w to write
+    fp = fopen("david.csv", "r"); 	// r is to read the file, w to write
     if (fp == NULL)					// if the file doesnt exist, exit the program (error handling)
         exit(EXIT_FAILURE);
 
-    while ((read = getline(&line, &len, fp)) != -1) { 	// this says keep reading the line until we get to the end
+	getline(&line, &len, fp);
 		char *n = strtok(line, ",");
 		char *b = strtok(NULL, ",");
-		char *s = strtok(NULL, ",");
-		char *q = strtok(NULL, ",");
-		double budget = atof(b); //converts to floating point
-		int quantity = atoi(q); //converts to an integer
-	printf("CUSTOMER NAME: %s\nCUSTOMER BUDGET: %.2f\nSHOPPING LIST: %s\nQUANTITY: %d\n", n,budget,s,quantity);
+		double budget = atof(b);	// creates the variable cashInShop from the first line in csv file
+	struct Customer name = { n };	// declares the initial value of the cashInShop
+	printf("CUSTOMER NAME: %s\nCUSTOMER BUDGET: %.2f\n", n,budget);
 	printf("-------------\n");
-    }
+    
 }
 
 void mainmenu(void)
 {
-	system("cls");
 	printf("                                 **************************************************************************\n");
 	printf("                                                     WELCOME TO OUR SHOP\n");
 	printf("                                 **************************************************************************\n\n\n");
-	printf("          1. STOCK--> \n\n          2. ORDERS--> \n\n          3. Exit--> \n\n\n             Enter Your Choice --->");
+	printf("          1. STOCK SHOP AND SHOW CURRENT STOCK--> \n\n          2. ORDERS--> \n\n          3. Exit--> \n\n\n             Enter Your Choice --->");
 	int choice;
 		scanf("%d",&choice);
 		if(choice==1)
@@ -131,11 +128,12 @@ void mainmenu(void)
 		}
 		else if(choice==2)
 		{
-			printf("50");
+			orders();
+			mainmenu();
 		}
 		else if(choice==3)
 		{
-			system("cls");
+			
 			printf("\n\n\n");
 			printf("*******************************THANK YOU**************************************\n");
 			exit(0);
