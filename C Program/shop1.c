@@ -107,15 +107,14 @@ void orders()
 		char *b = strtok(NULL, ",");
 		double budget = atof(b);	// creates the variable budget from the first line in csv file
 		struct Customer name = { n };	
-	// printf("CUSTOMER NAME: %s\nCUSTOMER BUDGET: %.2f\n", n,budget);
-	// printf("-------------\n");
-		struct ProductStock.shoppingList array[] = {i}; 
+		printf("CUSTOMER NAME: %s\nCUSTOMER BUDGET: %.2f\n", n,budget);
+		printf("-------------\n");
 		while ((read = getline(&line, &len, fp)) != -1) { 	// this says keep reading the line until we get to the end
-		struct Product p = array[i].product
-		printf("Product is %s", p.name*******)
-
-
-    
+		char *p = strtok(line,",");
+		char *q = strtok(NULL, ",");
+		int quantity = atoi(q);
+		printf("You want to buy %d of %s\n", quantity, p); 
+		}   
 }
 
 void mainmenu(void)
