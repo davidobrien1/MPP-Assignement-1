@@ -90,7 +90,19 @@ void printShop(struct Shop s)
 	}
 }
 
-void orders()
+double find(struct Shop s, char* name)
+{
+	for (int i = 0; i <s.index; i++)
+	{
+		if (strcmp(name, s.stock[i].product.name) == 0){
+			return s.stock[i].product.price;
+		}
+	}
+	return -1;
+}
+
+
+struct Customer custOrders()
 {
 
     FILE * fp;
@@ -105,16 +117,29 @@ void orders()
 	getline(&line, &len, fp);
 		char *n = strtok(line, ",");
 		char *b = strtok(NULL, ",");
+		char *custName = malloc(sizeof(char) * 50);
 		double budget = atof(b);	// creates the variable budget from the first line in csv file
-		struct Customer name = { n };	
+		strcpy(custName,n);
+		struct Customer customer = { custName, budget };	
 		printf("CUSTOMER NAME: %s\nCUSTOMER BUDGET: %.2f\n", n,budget);
 		printf("-------------\n");
+		
+		double totalOrderAmount = 0;
 		while ((read = getline(&line, &len, fp)) != -1) { 	// this says keep reading the line until we get to the end
-		char *p = strtok(line,",");
-		char *q = strtok(NULL, ",");
-		int quantity = atoi(q);
-		printf("You want to buy %d of %s\n", quantity, p); 
+			char *p = strtok(line,",");
+			char *q = strtok(NULL, ",");
+			int quantity = atoi(q);
+			char *name = malloc(sizeof(char) * 50);
+			strcpy(name, p);
+			struct Product product = {name,1}; // TODO  - need to insert find function where 50 is
+			struct ProductStock customerShoppingList = {product, quantity};
+			customer.shoppingList[customer.index++] = customerShoppingList;
+			// double amount = 2; 
+			// printf(amount);
+			// totalOrderAmount += amount;
+			printf("You want to buy %d of %s at €%.2f each TOTAL COST %d\n", quantity, p, product.price); 
 		}   
+		// printf("The total cost for this order is €%d", totalOrderAmount);
 }
 
 void mainmenu(void)
@@ -133,7 +158,8 @@ void mainmenu(void)
 		}
 		else if(choice==2)
 		{
-			orders();
+
+			custOrders();
 			mainmenu();
 		}
 		else if(choice==3)
