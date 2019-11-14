@@ -102,15 +102,15 @@ double find(struct Shop s, char* name)
 }
 
 
-struct Customer custOrders()
+struct Customer custOrders(char filename)
 {
 
     FILE * fp;
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
-
-    fp = fopen("david.csv", "r"); 	// r is to read the file, w to write
+	// printf(filename);
+ //   fp = fopen(filename, "r"); 	// r is to read the file, w to write
     if (fp == NULL)					// if the file doesnt exist, exit the program (error handling)
         exit(EXIT_FAILURE);
 
@@ -131,16 +131,18 @@ struct Customer custOrders()
 			int quantity = atoi(q);
 			char *name = malloc(sizeof(char) * 50);
 			strcpy(name, p);
-			struct Product product = {name,1}; // TODO  - need to insert find function where 50 is
+			struct Product product = {name,10}; // TODO  - need to insert find function where 50 is
 			struct ProductStock customerShoppingList = {product, quantity};
 			customer.shoppingList[customer.index++] = customerShoppingList;
-			// double amount = 2; 
+			double amount = 2; 
 			// printf(amount);
-			// totalOrderAmount += amount;
-			printf("You want to buy %d of %s at €%.2f each TOTAL COST %d\n", quantity, p, product.price); 
+			totalOrderAmount += amount;
+			printf("You want to buy %d of %s at €%.2f each TOTAL COST %.2f\n", quantity, p, product.price, amount); 
 		}   
-		// printf("The total cost for this order is €%d", totalOrderAmount);
+		printf("The total cost for this order is €%.2f", totalOrderAmount);
 }
+
+// Need to create a search for product name and return price, create while loop, compare strings, match name and stop the loop. return the price then.
 
 void mainmenu(void)
 {
@@ -149,6 +151,7 @@ void mainmenu(void)
 	printf("                                 **************************************************************************\n\n\n");
 	printf("          1. STOCK SHOP AND SHOW CURRENT STOCK--> \n\n          2. ORDERS--> \n\n          3. Exit--> \n\n\n             Enter Your Choice --->");
 	int choice;
+	char filename;
 		scanf("%d",&choice);
 		if(choice==1)
 		{
@@ -158,8 +161,10 @@ void mainmenu(void)
 		}
 		else if(choice==2)
 		{
-
-			custOrders();
+			//read in input from user
+			scanf("%s",&filename);
+			printf("Filename is%s",filename);
+			// custOrders(filename);
 			mainmenu();
 		}
 		else if(choice==3)
