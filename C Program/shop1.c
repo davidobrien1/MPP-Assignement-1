@@ -27,8 +27,8 @@ struct Customer { 	// a type of data that we define ourselves and can be made up
 
 void printProduct(struct Product p)	// void doesnt return anything, only prints.  This prints the product info
 {
-	printf("PRODUCT NAME: %s \nPRODUCT PRICE: %.2f\n", p.name, p.price);
-	printf("-------------\n");
+	printf("%s Costs: %.2f", p.name, p.price);
+	// printf("-------------\n");
 }
 
 void printCustomer(struct Customer c) // This prints the customer into
@@ -82,11 +82,12 @@ struct Shop createAndStockShop()
 
 void printShop(struct Shop s)
 {
-	printf("Shop has %.2f in cash\n", s.cash);
+	printf("-------------\n");
+	printf("Below is the current status of the shop:\nCash in the shop is: %.2f in cash\nStock List:\n", s.cash);
 	for (int i = 0; i < s.index; i++)
 	{
 		printProduct(s.stock[i].product);
-		printf("The shop has %d of the above\n", s.stock[i].quantity);
+		printf(" Quantity in Stock: %d\n", s.stock[i].quantity);
 	}
 }
 
@@ -102,7 +103,7 @@ double find(struct Shop s, char* name)
 }
 
 
-struct Customer custOrders(char filename)
+struct Customer custOrders(char filename[])
 {
 
     FILE * fp;
@@ -110,7 +111,7 @@ struct Customer custOrders(char filename)
     size_t len = 0;
     ssize_t read;
 	// printf(filename);
- //   fp = fopen(filename, "r"); 	// r is to read the file, w to write
+	fp = fopen(filename, "r"); 	// r is to read the file, w to write
     if (fp == NULL)					// if the file doesnt exist, exit the program (error handling)
         exit(EXIT_FAILURE);
 
@@ -121,6 +122,7 @@ struct Customer custOrders(char filename)
 		double budget = atof(b);	// creates the variable budget from the first line in csv file
 		strcpy(custName,n);
 		struct Customer customer = { custName, budget };	
+		printf("-------------\n");		
 		printf("CUSTOMER NAME: %s\nCUSTOMER BUDGET: %.2f\n", n,budget);
 		printf("-------------\n");
 		
@@ -146,28 +148,35 @@ struct Customer custOrders(char filename)
 
 void mainmenu(void)
 {
-	printf("                                 **************************************************************************\n");
-	printf("                                                     WELCOME TO OUR SHOP\n");
-	printf("                                 **************************************************************************\n\n\n");
-	printf("          1. STOCK SHOP AND SHOW CURRENT STOCK--> \n\n          2. ORDERS--> \n\n          3. Exit--> \n\n\n             Enter Your Choice --->");
+	printf("Welcome to the Shop!\n");
+	printf("***********************\n");
+	printf("Choose option:\n");	
+	printf("1. Purchase from a CSV file\n");
+	printf("2. Live Purchase\n");
 	int choice;
-	char filename;
+
 		scanf("%d",&choice);
+		// if(choice==1)
+		// {
+		// 	struct Shop shop = createAndStockShop();
+		// 	printShop(shop);
+		// 	mainmenu();
+		// }
 		if(choice==1)
 		{
+			
+			
+			char filename[25];
+			printf("Enter filename with extension:");
+			scanf("%s",&filename);			
+			// gets(filename);
 			struct Shop shop = createAndStockShop();
 			printShop(shop);
+			// printf("Filename is%s",filename);
+			custOrders(filename);
 			mainmenu();
 		}
 		else if(choice==2)
-		{
-			//read in input from user
-			scanf("%s",&filename);
-			printf("Filename is%s",filename);
-			// custOrders(filename);
-			mainmenu();
-		}
-		else if(choice==3)
 		{
 			
 			printf("\n\n\n");
