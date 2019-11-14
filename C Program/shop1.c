@@ -139,7 +139,7 @@ struct Customer custOrders(char filename[])
 			double amount = 2; 
 			// printf(amount);
 			totalOrderAmount += amount;
-			printf("You want to buy %d of %s at €%.2f each TOTAL COST %.2f\n", quantity, p, product.price, amount); 
+			printf("%d %s purchased at €%.2f each TOTAL COST %.2f\n", quantity, p, product.price, amount); 
 		}   
 		printf("The total cost for this order is €%.2f", totalOrderAmount);
 }
@@ -148,7 +148,7 @@ struct Customer custOrders(char filename[])
 
 void mainmenu(void)
 {
-	printf("Welcome to the Shop!\n");
+	printf("\nWelcome to the Shop!\n");
 	printf("***********************\n");
 	printf("Choose option:\n");	
 	printf("1. Purchase from a CSV file\n");
@@ -164,7 +164,10 @@ void mainmenu(void)
 		// }
 		if(choice==1)
 		{
-			
+			// struct Shop shop = createAndStockShop();
+			// double price = find(shop, "Spaghetti");
+			// printf("Price is %.2f",price);
+
 			
 			char filename[25];
 			printf("Enter filename with extension:");
