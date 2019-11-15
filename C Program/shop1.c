@@ -103,14 +103,12 @@ double find(struct Shop s, char* name)
 }
 
 
-struct Customer custOrders(char filename[])
+struct Customer custOrders(char filename[], struct Shop s)
 {
-
     FILE * fp;
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
-	// printf(filename);
 	fp = fopen(filename, "r"); 	// r is to read the file, w to write
     if (fp == NULL)					// if the file doesnt exist, exit the program (error handling)
         exit(EXIT_FAILURE);
@@ -133,35 +131,33 @@ struct Customer custOrders(char filename[])
 			int quantity = atoi(q);
 			char *name = malloc(sizeof(char) * 50);
 			strcpy(name, p);
-			struct Product product = {name,10}; // TODO  - need to insert find function where 50 is
+			double price = find(s,name); //need to get this working to find price
+			// printf("Price is %.2f",price);
+			struct Product product = {name,price}; // TODO  - need to insert find function where 50 is
 			struct ProductStock customerShoppingList = {product, quantity};
 			customer.shoppingList[customer.index++] = customerShoppingList;
-			double amount = 2; 
-			// printf(amount);
+			double amount = quantity * price; //need to update this 2 for the actual price
+			// printf(amount); 
 			totalOrderAmount += amount;
 			printf("%d %s purchased at €%.2f each TOTAL COST %.2f\n", quantity, p, product.price, amount); 
 		}   
-		printf("The total cost for this order is €%.2f", totalOrderAmount);
+		printf("The total cost for this order is €%.2f\n", totalOrderAmount);
 }
 
 // Need to create a search for product name and return price, create while loop, compare strings, match name and stop the loop. return the price then.
 
 void mainmenu(void)
 {
-	printf("\nWelcome to the Shop!\n");
+	printf("***********************\n");	
+	printf("Welcome to the Shop!\n");
 	printf("***********************\n");
 	printf("Choose option:\n");	
 	printf("1. Purchase from a CSV file\n");
 	printf("2. Live Purchase\n");
+	printf("3. Exit\n");
 	int choice;
 
 		scanf("%d",&choice);
-		// if(choice==1)
-		// {
-		// 	struct Shop shop = createAndStockShop();
-		// 	printShop(shop);
-		// 	mainmenu();
-		// }
 		if(choice==1)
 		{
 			// struct Shop shop = createAndStockShop();
@@ -176,16 +172,30 @@ void mainmenu(void)
 			struct Shop shop = createAndStockShop();
 			printShop(shop);
 			// printf("Filename is%s",filename);
-			custOrders(filename);
+			custOrders(filename, shop);
 			mainmenu();
 		}
 		else if(choice==2)
 		{
-			
-			printf("\n\n\n");
-			printf("*******************************THANK YOU**************************************\n");
-			exit(0);
+			int quantity;
+			struct Shop shop = createAndStockShop();
+			printShop(shop);
+			printf("How many products do you want to purchase?\n");
+			scanf("%d",&quantity);
+			char prodName;
+			printf("Enter product name you want to purchase:\n");
+			scanf("%s",&prodName);
+			int qty;
+			printf("Enter quantity you want to purchase:\n");
+			scanf("%s",&qty);			
 		}
+		else if(choice==3)
+		{
+			printf("***********************\n");
+			printf("THANK YOU\n");
+			printf("***********************\n");
+			exit(0);
+		}		
 		else
 		{
 			printf("Incorrect Selection. PLease Select 1,2 or 3");
