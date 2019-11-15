@@ -125,26 +125,34 @@ struct Customer custOrders(char filename[], struct Shop s)
 		printf("-------------\n");
 		
 		double totalOrderAmount = 0;
+
 		while ((read = getline(&line, &len, fp)) != -1) { 	// this says keep reading the line until we get to the end
 			char *p = strtok(line,",");
 			char *q = strtok(NULL, ",");
 			int quantity = atoi(q);
 			char *name = malloc(sizeof(char) * 50);
 			strcpy(name, p);
-			double price = find(s,name); //need to get this working to find price
-			// printf("Price is %.2f",price);
-			struct Product product = {name,price}; // TODO  - need to insert find function where 50 is
+			double price = find(s,name); 
+			struct Product product = {name,price}; 
 			struct ProductStock customerShoppingList = {product, quantity};
 			customer.shoppingList[customer.index++] = customerShoppingList;
-			double amount = quantity * price; //need to update this 2 for the actual price
-			// printf(amount); 
+			double amount = quantity * price;  
 			totalOrderAmount += amount;
 			printf("%d %s purchased at €%.2f each TOTAL COST %.2f\n", quantity, p, product.price, amount); 
-		}   
-		printf("The total cost for this order is €%.2f\n", totalOrderAmount);
+			} 
+		if(totalOrderAmount >0 && totalOrderAmount < budget){
+			printf("The total cost for this order is €%.2f\n", totalOrderAmount);
+		}
+		if(totalOrderAmount > budget){
+			printf("You do not have sufficent funds for this purchase\n");
+		}		
+		
+		if(totalOrderAmount == 0){
+			printf("Customer does not have a shopping list\n");
+		}
+
 }
 
-// Need to create a search for product name and return price, create while loop, compare strings, match name and stop the loop. return the price then.
 
 void mainmenu(void)
 {
@@ -159,12 +167,7 @@ void mainmenu(void)
 
 		scanf("%d",&choice);
 		if(choice==1)
-		{
-			// struct Shop shop = createAndStockShop();
-			// double price = find(shop, "Spaghetti");
-			// printf("Price is %.2f",price);
-
-			
+		{	
 			char filename[25];
 			printf("Enter filename with extension:");
 			scanf("%s",&filename);			
