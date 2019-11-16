@@ -196,19 +196,22 @@ void mainmenu(void)
 		}
 		else if(choice==2)
 		{
-			int quantity;
+			int count;
 			char prodName[25];
 			struct Shop shop = createAndStockShop();
+			char temp[100];
 			printShop(shop);
 			printf("How many products do you want to purchase?\n");
-			scanf("%d",&quantity);
-			printf("Enter product name you want to purchase:\n");
-			scanf("%s",&prodName);
-			double price = find(shop,prodName); 
+			scanf("%d",&count);
 
-
-			printf("You want to purchase %d of %s at %.2f each", quantity, prodName,price);
-			
+			while(count>0){
+				printf("Enter product name you want to purchase:\n");
+				scanf("%c", &temp);
+				scanf("%[^\n]s", prodName); // this is used to allow for the space between words
+				double price = find(shop,prodName); 
+				printf("You want to purchase %d of %s at %.2f each\n", count, prodName,price);
+				count--;
+			}
 			
 			// char prodName;
 			// printf("Enter product name you want to purchase:\n");
