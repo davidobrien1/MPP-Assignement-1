@@ -197,10 +197,15 @@ void mainmenu(void)
 		else if(choice==2)
 		{
 			int count;
+			int quantity;
 			char prodName[25];
 			struct Shop shop = createAndStockShop();
 			char temp[100];
+			double totalOrderAmount = 0;
+			int budget;
 			printShop(shop);
+			printf("Enter your budget:\n");
+			scanf("%d",&budget);			
 			printf("How many products do you want to purchase?\n");
 			scanf("%d",&count);
 
@@ -209,10 +214,23 @@ void mainmenu(void)
 				scanf("%c", &temp);
 				scanf("%[^\n]s", prodName); // this is used to allow for the space between words
 				double price = find(shop,prodName); 
-				printf("You want to purchase %d of %s at %.2f each\n", count, prodName,price);
+				printf("Enter quantity you want to purchase:\n");
+				scanf("%d",&quantity);
+				printf("You want to purchase %d of %s at %.2f each\n", quantity, prodName,price);
+				double amount = quantity * price;
+				totalOrderAmount += amount;
 				count--;
 			}
-			
+			if(totalOrderAmount >0 && totalOrderAmount < budget){
+				double change = budget - totalOrderAmount;
+				printf("The total cost for this order is €%.2f\nYour change is €%.2f", totalOrderAmount, change);			
+			}
+			if(totalOrderAmount > budget){
+				printf("You do not have sufficent funds for this purchase\n");
+			}		
+			if(totalOrderAmount == 0){
+				printf("Customer does not have a shopping list\n");
+			}		
 			// char prodName;
 			// printf("Enter product name you want to purchase:\n");
 			// scanf("%s",&prodName);
