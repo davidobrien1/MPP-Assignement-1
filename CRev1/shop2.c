@@ -12,13 +12,13 @@ struct ProductStock {
 	int quantity;				// quantity of stock
 };
 
-struct Shop {						//
+struct Shop {						
 	double cash;
 	struct ProductStock stock[20];	// this is our stock in our shop
 	int index;
 };
 
-struct Customer { 	// a type of data that we define ourselves and can be made up of one or more data types
+struct Customer { 	// a struct is a type of data that we define ourselves and can be made up of one or more data types
 	char* name;		// we want the customer to have a name, and we dont know how long it will be so we will make it a pointer so it can expand in memory
 	double budget;	// double means it can be a decimal number
 	struct ProductStock shoppingList[10];
@@ -28,7 +28,6 @@ struct Customer { 	// a type of data that we define ourselves and can be made up
 void printProduct(struct Product p)	// void doesnt return anything, only prints.  This prints the product info
 {
 	printf("%s Costs: %.2f", p.name, p.price);
-	// printf("-------------\n");
 }
 
 void printCustomer(struct Customer c) // This prints the customer into
@@ -61,9 +60,7 @@ struct Shop createAndStockShop()
 	struct Shop shop = { cashInShop };	// declares the initial value of the cashInShop
 
     while ((read = getline(&line, &len, fp)) != -1) { 	// this says keep reading the line until we get to the end
-        // printf("Retrieved line of length %zu:\n", read);
-        // printf("%s IS A LINE", line);
-		char *n = strtok(line, ","); //parse the line at the comment
+		char *n = strtok(line, ","); //parse the line at the comma
 		char *p = strtok(NULL, ","); // Null means we're not passing any information, continues from where it last stop
 		char *q = strtok(NULL, ",");
 		int quantity = atoi(q); //converts to an integer
@@ -73,7 +70,6 @@ struct Shop createAndStockShop()
 		struct Product product = { name, price }; 
 		struct ProductStock stockItem = { product, quantity }; 
 		shop.stock[shop.index++] = stockItem; // this adds the item to the shop
-		// printf("NAME OF PRODUCT %s PRICE %.2f QUANTITY %d\n", name, price, quantity);
     }
 	
 	return shop;
@@ -102,6 +98,10 @@ double find(struct Shop s, char* name)
 	return -1;
 }
 
+// The code below that has been commented out was my attempt at updating the customer file.  
+// The idea was that the customers file would be updated with the new budget amount, and the shopping list would be removed from it.
+// However, when I tried adding this function to the 'custOrders' function, i received a segmentation fault and 'malloc' would not fix it for me
+
 // double updateCustomerFile(char filename[],char customerName[],double newBudget){
 // 	    FILE * fp;
 //     char * line = NULL;
@@ -109,20 +109,20 @@ double find(struct Shop s, char* name)
 //     ssize_t read;
 
 //     fp = fopen(filename, "w"); 	// w to write
-//     if (fp == NULL)					// if the file doesnt exist, exit the program (error handling)
+//     if (fp == NULL)					
 //         exit(EXIT_FAILURE);
 // 		fprintf(fp, "%s,%.2f\n",customerName,newBudget);
 // }
 
 
-struct Customer custOrders(char filename[], struct Shop s)
+struct Customer custOrders(char filename[], struct Shop s) // created to process the customer order
 {
     FILE * fp;
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
-	fp = fopen(filename, "r"); 	// r is to read the file, w to write
-    if (fp == NULL)					// if the file doesnt exist, exit the program (error handling)
+	fp = fopen(filename, "r"); 	
+    if (fp == NULL)					
         exit(EXIT_FAILURE);
 
 	getline(&line, &len, fp);
@@ -138,7 +138,7 @@ struct Customer custOrders(char filename[], struct Shop s)
 		
 		double totalOrderAmount = 0;
 
-		while ((read = getline(&line, &len, fp)) != -1) { 	// this says keep reading the line until we get to the end
+		while ((read = getline(&line, &len, fp)) != -1) { 	
 			char *p = strtok(line,",");
 			char *q = strtok(NULL, ",");
 			int quantity = atoi(q);
@@ -154,18 +154,15 @@ struct Customer custOrders(char filename[], struct Shop s)
 			} 
 		if(totalOrderAmount >0 && totalOrderAmount < budget){
 			printf("The total cost for this order is €%.2f\n", totalOrderAmount);
-			// char customerName[25];
-			// updateCustomerFile(filename,custName,200);			
-
+			// char customerName[25]; // this was my attempt at updating the customer file
+			// updateCustomerFile(filename,customerName,200); // this was my attempt at updating the customer file			
 		}
 		if(totalOrderAmount > budget){
-			printf("You do not have sufficent funds for this purchase\n");
+			printf("You do not have enough funds for this purchase\n");
 		}		
-		
 		if(totalOrderAmount == 0){
 			printf("Customer does not have a shopping list\n");
 		}
-
 }
 
 
@@ -183,9 +180,6 @@ void mainmenu(void)
 		scanf("%d",&choice);
 		if(choice==1)
 		{	
-			// char name[25];
-			// updateCustomerFile("customer1.csv","Padraic",200);
-
 			char filename[25];
 			printf("Enter filename with extension:");
 			scanf("%s",&filename);			
@@ -223,22 +217,12 @@ void mainmenu(void)
 			}
 			if(totalOrderAmount >0 && totalOrderAmount < budget){
 				double change = budget - totalOrderAmount;
-				printf("The total cost for this order is €%.2f\nYour change is €%.2f", totalOrderAmount, change);			
+				printf("The total cost for this order is €%.2f\nYour change is €%.2f\n", totalOrderAmount, change);			
 			}
 			if(totalOrderAmount > budget){
-				printf("You do not have sufficent funds for this purchase\n");
-			}		
-			if(totalOrderAmount == 0){
-				printf("Customer does not have a shopping list\n");
-			}		
-			// char prodName;
-			// printf("Enter product name you want to purchase:\n");
-			// scanf("%s",&prodName);
-			// int qty;
-			// printf("Enter quantity you want to purchase:\n");
-			// scanf("%d",&qty);
-			// printf("%d",qty);	
-			// printf("%d %s purchased\n", qty, prodName);		
+				printf("You do not have enough funds for this purchase\n");
+			}			
+			mainmenu();		
 		}
 		else if(choice==3)
 		{
@@ -257,27 +241,6 @@ void mainmenu(void)
 
 int main(void) 
 {
-	// struct Customer dominic = { "Dominic", 100.0 };  this creates the customer dominic
-	//
-	// struct Product coke = { "Can Coke", 1.10 };
-	// struct Product bread = { "Bread", 0.7 };
-	// // printProduct(coke);
-	//
-	// struct ProductStock cokeStock = { coke, 20 };
-	// struct ProductStock breadStock = { bread, 2 };
-	//
-	// dominic.shoppingList[dominic.index++] = cokeStock; // this code is used to return to value at index, and increment it by one so that the next time its accessed it is one
-	// dominic.shoppingList[dominic.index++] = breadStock;
-	//
-	// printCustomer(dominic);
-	
-//	struct Shop shop = createAndStockShop();
-//	printShop(shop);
-
-//	orders();
-	
-
-// printf("The shop has %d of the product %s\n", cokeStock.quantity, cokeStock.product.name);
 	mainmenu();
     return 0;
 }
