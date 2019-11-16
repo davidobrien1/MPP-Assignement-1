@@ -102,6 +102,18 @@ double find(struct Shop s, char* name)
 	return -1;
 }
 
+// double updateCustomerFile(char filename[],char customerName[],double newBudget){
+// 	    FILE * fp;
+//     char * line = NULL;
+//     size_t len = 0;
+//     ssize_t read;
+
+//     fp = fopen(filename, "w"); 	// w to write
+//     if (fp == NULL)					// if the file doesnt exist, exit the program (error handling)
+//         exit(EXIT_FAILURE);
+// 		fprintf(fp, "%s,%.2f\n",customerName,newBudget);
+// }
+
 
 struct Customer custOrders(char filename[], struct Shop s)
 {
@@ -142,6 +154,9 @@ struct Customer custOrders(char filename[], struct Shop s)
 			} 
 		if(totalOrderAmount >0 && totalOrderAmount < budget){
 			printf("The total cost for this order is €%.2f\n", totalOrderAmount);
+			// char customerName[25];
+			// updateCustomerFile(filename,custName,200);			
+
 		}
 		if(totalOrderAmount > budget){
 			printf("You do not have sufficent funds for this purchase\n");
@@ -168,13 +183,14 @@ void mainmenu(void)
 		scanf("%d",&choice);
 		if(choice==1)
 		{	
+			// char name[25];
+			// updateCustomerFile("customer1.csv","Padraic",200);
+
 			char filename[25];
 			printf("Enter filename with extension:");
 			scanf("%s",&filename);			
-			// gets(filename);
 			struct Shop shop = createAndStockShop();
 			printShop(shop);
-			// printf("Filename is%s",filename);
 			custOrders(filename, shop);
 			mainmenu();
 		}
